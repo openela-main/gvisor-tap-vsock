@@ -11,9 +11,9 @@
 
 Name: gvisor-tap-vsock
 Epoch: 6
-Version: 0.7.3
+Version: 0.7.5
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT
-Release: 5%{?dist}
+Release: 1%{?dist}
 ExclusiveArch: %{golang_arches_future}
 Summary: Go replacement for libslirp and VPNKit
 URL: https://github.com/containers/%{name}
@@ -77,17 +77,13 @@ install -p -m0755 bin/gvforwarder %{buildroot}%{_libexecdir}/podman
 %{_libexecdir}/podman/gvforwarder
 
 %changelog
-* Tue Jul 23 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.7.3-5
-- rebuild for CVE-2024-24783
-- Resolves: RHEL-28435
+* Tue Aug 27 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.7.5-1
+- update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.7.5
+- Related: RHEL-27608
 
-* Fri Jun 21 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.7.3-4
-- rebuild for CVE-2024-1394
-- Resolves: RHEL-24315
-
-* Thu May 02 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.7.3-3
-- rebuild for CVE-2023-45290
-- Resolves: RHEL-28388
+* Mon Aug 05 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.7.4-1
+- update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.7.4
+- Related: RHEL-27608
 
 * Mon Feb 12 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.7.3-2
 - Add gating.yaml
