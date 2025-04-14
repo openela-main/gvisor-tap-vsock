@@ -11,7 +11,7 @@
 
 Name: gvisor-tap-vsock
 Epoch: 6
-Version: 0.7.5
+Version: 0.8.5
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT
 Release: 1%{?dist}
 ExclusiveArch: %{golang_arches_future}
@@ -77,6 +77,10 @@ install -p -m0755 bin/gvforwarder %{buildroot}%{_libexecdir}/podman
 %{_libexecdir}/podman/gvforwarder
 
 %changelog
+* Mon Apr 07 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.5-1
+- Fix CVE-2025-22869 by updating to 0.8.5
+- Resolves: RHEL-81312
+
 * Tue Aug 27 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.7.5-1
 - update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.7.5
 - Related: RHEL-27608
