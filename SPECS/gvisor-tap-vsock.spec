@@ -9,12 +9,30 @@
 
 %global gomodulesmode GO111MODULE=on
 
+%global _gvisor_installdir %{_libexecdir}/podman
+
+%global desc_gvforwarder Forward traffic from a tap interface over vsock
+
 Name: gvisor-tap-vsock
+%if %{defined copr_username}
+Epoch: 103
+%else
 Epoch: 6
+%endif
+# DO NOT TOUCH the Version string!
+# The TRUE source of this specfile is:
+# https://github.com/containers/podman/blob/main/rpm/podman.spec
+# If that's what you're reading, Version must be 0, and will be updated by Packit for
+# copr and koji builds.
+# If you're reading this on dist-git, the version is automatically filled in by Packit.
 Version: 0.8.5
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT
 Release: 1%{?dist}
+%if %{defined golang_arches_future}
 ExclusiveArch: %{golang_arches_future}
+%else
+ExclusiveArch: aarch64 ppc64le s390x x86_64
+%endif
 Summary: Go replacement for libslirp and VPNKit
 URL: https://github.com/containers/%{name}
 # All SourceN files fetched from upstream
@@ -25,17 +43,34 @@ BuildRequires: glibc-devel
 BuildRequires: glibc-static
 BuildRequires: golang
 BuildRequires: git-core
+%if %{defined rhel} && 0%{?rhel} == 8
+BuildRequires: go-srpm-macros
+%else
 BuildRequires: go-rpm-macros
+%endif
 BuildRequires: make
+%if %{defined copr_username}
+Obsoletes: podman-gvproxy < 102:4.7.0-1
+%else
 Obsoletes: podman-gvproxy < 5:4.7.0-1
+%endif
 Provides: podman-gvproxy = %{epoch}:%{version}-%{release}
+Requires: %{name}-gvforwarder = %{epoch}:%{version}-%{release}
 
 %description
 A replacement for libslirp and VPNKit, written in pure Go.
-It is based on the network stack of gVisor and is used to provide
-networking for podman-machine virtual machines. Compared to libslirp,
-gvisor-tap-vsock brings a configurable DNS server and dynamic
-port forwarding.
+It is based on the network stack of gVisor. Compared to libslirp,
+gvisor-tap-vsock brings a configurable DNS server and
+dynamic port forwarding.
+
+%package gvforwarder
+Summary: %{desc_gvforwarder}
+Provides: gvforwarder = %{epoch}:%{version}-%{release}
+Obsoletes: %{name} < 6:0.7.0-6
+Recommends: %{name} = %{epoch}:%{version}-%{release}
+
+%description gvforwarder
+%{desc_gvforwarder}
 
 %prep
 %autosetup -Sgit -n %{name}-%{version}
@@ -62,9 +97,9 @@ LDFLAGS=''
 
 %install
 # install gvproxy
-install -dp %{buildroot}%{_libexecdir}/podman
-install -p -m0755 bin/gvproxy %{buildroot}%{_libexecdir}/podman
-install -p -m0755 bin/gvforwarder %{buildroot}%{_libexecdir}/podman
+install -dp %{buildroot}%{_gvisor_installdir}
+install -p -m0755 bin/gvproxy %{buildroot}%{_gvisor_installdir}
+install -p -m0755 bin/gvforwarder %{buildroot}%{_gvisor_installdir}
 
 #define license tag if not already defined
 %{!?_licensedir:%global license %doc}
@@ -72,14 +107,33 @@ install -p -m0755 bin/gvforwarder %{buildroot}%{_libexecdir}/podman
 %files
 %license LICENSE
 %doc README.md
-%dir %{_libexecdir}/podman
-%{_libexecdir}/podman/gvproxy
-%{_libexecdir}/podman/gvforwarder
+%dir %{_gvisor_installdir}
+%{_gvisor_installdir}/gvproxy
+
+%files gvforwarder
+%dir %{_gvisor_installdir}
+%{_gvisor_installdir}/gvforwarder
 
 %changelog
 * Mon Apr 07 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.5-1
 - Fix CVE-2025-22869 by updating to 0.8.5
-- Resolves: RHEL-81312
+- Resolves: RHEL-81313
+
+* Tue Feb 04 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.3-1
+- update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.3
+- Related: RHEL-60277
+
+* Mon Jan 20 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.2-1
+- update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.2
+- Related: RHEL-60277
+
+* Tue Dec 03 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.8.1-1
+- update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.1
+- Resolves: RHEL-69761
+
+* Wed Nov 27 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.8.0-1
+- update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.0
+- Related: RHEL-60277
 
 * Tue Aug 27 2024 Jindrich Novy <jnovy@redhat.com> - 6:0.7.5-1
 - update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.7.5
