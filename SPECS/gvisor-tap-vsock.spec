@@ -25,7 +25,7 @@ Epoch: 6
 # If that's what you're reading, Version must be 0, and will be updated by Packit for
 # copr and koji builds.
 # If you're reading this on dist-git, the version is automatically filled in by Packit.
-Version: 0.8.5
+Version: 0.8.6
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT
 Release: 2%{?dist}
 %if %{defined golang_arches_future}
@@ -115,14 +115,21 @@ install -p -m0755 bin/gvforwarder %{buildroot}%{_gvisor_installdir}
 %{_gvisor_installdir}/gvforwarder
 
 %changelog
-* Wed Jun 11 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.5-2
+* Wed Jun 11 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.6-2
 - rebuild for CVE-2025-22871
-- Resolves: RHEL-90007
+- Resolves: RHEL-90008
 
-* Mon Apr 07 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.5-1
+* Fri May 09 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.6-1
+- update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.6
+- Related: RHEL-80817
+
+* Tue Mar 18 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.5-1
 - update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.5
-- fixes "CVE-2025-22869 gvisor-tap-vsock: Denial of Service in the Key Exchange of golang.org/x/crypto/ssh"
-- Resolves: RHEL-82772
+- Related: RHEL-80817
+
+* Tue Mar 11 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.4-1
+- update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.4
+- Resolves: RHEL-83030
 
 * Tue Feb 04 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.3-1
 - update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.3
