@@ -27,7 +27,7 @@ Epoch: 6
 # If you're reading this on dist-git, the version is automatically filled in by Packit.
 Version: 0.8.7
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT
-Release: 1%{?dist}
+Release: 2%{?dist}
 %if %{defined golang_arches_future}
 ExclusiveArch: %{golang_arches_future}
 %else
@@ -115,6 +115,25 @@ install -p -m0755 bin/gvforwarder %{buildroot}%{_gvisor_installdir}
 %{_gvisor_installdir}/gvforwarder
 
 %changelog
+* Wed Oct 28 2026 Anjan Nath <anath@redhat.com> - 6:0.8.7-3
+- rebuild for CVE-2026-94440, CVE-2026-111943, CVE-2026-56853, CVE-2026-33818,
+  CVE-2026-56862, CVE-2026-78667, CVE-2026-97031
+- Resolves: RHEL-290179
+- Resolves: RHEL-287620
+- Resolves: RHEL-286759
+- Resolves: RHEL-286416
+- Resolves: RHEL-286227
+- Resolves: RHEL-285860
+- Resolves: RHEL-285404
+
+* Wed Mar 11 2026 Christophe Fergeau <cfergeau@redhat.com> - 6:0.8.7-2
+- rebuild for CVE-2025-68121, CVE-2025-61726, CVE-2025-61729, CVE-2025-61728, CVE-2025-61729
+- Resolves: RHEL-140518
+- Resolves: RHEL-145414
+- Resolves: RHEL-146723
+- Resolves: RHEL-146928
+- Resolves: RHEL-149248
+
 * Fri Aug 29 2025 Jindrich Novy <jnovy@redhat.com> - 6:0.8.7-1
 - update to https://github.com/containers/gvisor-tap-vsock/releases/tag/v0.8.7
 - Resolves: RHEL-111948
